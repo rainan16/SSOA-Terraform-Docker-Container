@@ -1,0 +1,16 @@
+{
+  "name": "nationservice",
+  "version": "0.1.0",
+  "description": "guess my nation service",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "GruppeH",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "node-fetch": "^2.6.1"
+  }
+}
