@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  nationservice:
+    container_name: nationservice
+    hostname: nationserviceHost
+    build: ./Node-Service-Nationalize
+    image: rainan/nationservice:latest
+    ports:
+      - "3001:3001"
+      
+  genderservice:
+    container_name: genderservice
+    hostname: genderserviceHost
+    build: ./Node-Service-Genderize
+    image: rainan/genderservice:latest
+    ports:
+      - "3002:3002"
+
+  blazorserviceguessmyui:
+    container_name: blazorserviceguessmyui
+    hostname: blazorserviceguessmyuiHost
+    build: ./Blazor-Service-GuessMyUI
+    image: rainan/blazorserviceguessmyui:latest
+    environment:
+      - NATIONSERVICEIP=nationserviceHost
+      - NATIONSERVICEPORT=3001
+      - GENDERSERVICEIP=genderserviceHost
+      - GENDERSERVICEPORT=3002     
+    ports:
+      - "80:80"        

@@ -1,0 +1,24 @@
+@page "/"
+@inject NavigationManager NavManager
+
+<h1 class="p-3">Guess my Nation and Gender!</h1>
+
+<p class="p-3">Uncomfortable? Shy? Don't know how to start?</p>
+
+<form class="p-3" @onsubmit=ShowGuess>
+    <input class="input-lg" placeholder="Enter your name!" @bind-value="@value" />
+    <button type="submit" class="btn btn-info">Guess</button>
+</form>
+
+<p class="d-flex align-items-center justify-content-center text-success" style="height: 350px;">Break the ice with Guess my Nation and Gender!</p>
+
+@code {
+
+    private string value { get; set; }
+
+    private void ShowGuess()
+    {
+        NavManager.NavigateTo("/fetchdata/" + value);
+    }
+
+}
