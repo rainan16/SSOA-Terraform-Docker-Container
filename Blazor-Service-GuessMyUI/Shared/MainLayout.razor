@@ -1,0 +1,25 @@
+@inherits LayoutComponentBase
+@inject IJSRuntime JSRuntime
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <div class="main">
+        <div class="top-row px-4">
+            <button class="btn btn-info" @onclick=ShowAbout>About</button>
+        </div>
+
+        <div class="content px-4">
+            @Body
+        </div>
+    </div>
+</div>
+
+@code{
+    async Task ShowAbout()
+    {
+        await JSRuntime.InvokeVoidAsync("confirm", "Project by GruppeH");  
+    }
+}

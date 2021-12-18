@@ -1,0 +1,73 @@
+﻿@page "/fetchdata"
+@page "/fetchdata/{username}"
+
+@using Blazor_Service_GuessMyUI.Data
+@inject GuessNationService NationService
+@inject GuessGenderService GenderService
+
+<h1>Guess My: @username</h1>
+
+@if (nationData == null)
+{
+    <p><em>Loading nation data from @NationServiceIP...</em></p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Country ID</th>
+                <th>Probability</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var country in nationData.country)
+            {
+                <tr>
+                    <td class="col-md-3">@country.country_id</td>
+                    <td class="col-md-3">@String.Format("{0:0}", country.probability * 100) %</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (nationData == null)
+{
+    <p><em>Loading gender data from @NationGenderIP...</em></p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Gender</th>
+                <th>Probability</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="col-md-3">@genderData.gender</td>
+                <td class="col-md-3">@String.Format("{0:0}", genderData.probability * 100) %</td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string username { get; set; }
+    private string NationServiceIP = EnvironmentHelper.GetNationServiceIP() + ":" + EnvironmentHelper.GetNationServicePort();
+    private string NationGenderIP = EnvironmentHelper.GetGenderServiceIP() + ":" + EnvironmentHelper.GetGenderServicePort();
+    private GuessNationData nationData;
+    private GuessGenderData genderData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrEmpty(username)) {
+            username = "Andreas";
+        }        
+        nationData = await NationService.GetGuessNationData(username);
+        genderData = await GenderService.GetGuessGenderData(username);
+    }
+}
