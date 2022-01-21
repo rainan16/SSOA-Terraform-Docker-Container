@@ -1,5 +1,12 @@
 name: docker-compose-push-action
-on: push
+
+on: 
+  push:
+    branches: [ main ]
+    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
   build-container:
     runs-on: ubuntu-latest
