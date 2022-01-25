@@ -5,7 +5,7 @@ services:
     container_name: nationservice
     hostname: nationserviceHost
     build: ./Node-Service-Nationalize
-    image: "rainan/nationservice:${TAG}"
+    image: "${DOCKERHUBNAME}/nationservice:${TAG}"
     ports:
       - "3001:3001"
       
@@ -13,7 +13,7 @@ services:
     container_name: genderservice
     hostname: genderserviceHost
     build: ./Node-Service-Genderize
-    image: "rainan/genderservice:${TAG}"
+    image: "${DOCKERHUBNAME}/genderservice:${TAG}"
     ports:
       - "3002:3002"
 
@@ -21,7 +21,7 @@ services:
     container_name: blazorserviceguessmyui
     hostname: blazorserviceguessmyuiHost
     build: ./Blazor-Service-GuessMyUI
-    image: "rainan/blazorserviceguessmyui:${TAG}"
+    image: "${DOCKERHUBNAME}/blazorserviceguessmyui:${TAG}"
     environment:
       - NATIONSERVICEIP=nationserviceHost
       - NATIONSERVICEPORT=3001
