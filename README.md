@@ -10,4 +10,4 @@ In github, GITHUB_SECRECTS must be set to run the Actions:
 
 Update [.env](.env) and [.env.test](.env.test) the Dockerhub repository:
 
-```${DOCKERHUBNAME}```
+```DOCKERHUBNAME```
