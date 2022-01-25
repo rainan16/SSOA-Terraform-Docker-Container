@@ -13,15 +13,12 @@ name: "CodeQL"
 
 on:
   push:
-    paths:
-    - '**.cs'
-    - '**.csproj'
+    branches: [ main ]
   pull_request:
-    paths:
-    - '**.cs'
-    - '**.csproj'    
+    # The branches below must be a subset of the branches above
+    branches: [ main ]
   schedule:
-    - cron: '35 12 * * 6'
+    - cron: '22 11 * * 0'
 
 jobs:
   analyze:
@@ -35,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp' ]
+        language: [ 'csharp', 'javascript' ]
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Learn more about CodeQL language support at https://git.io/codeql-language-support
 
