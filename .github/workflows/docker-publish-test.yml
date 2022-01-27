@@ -3,12 +3,19 @@ name: docker-compose-push-test-action
 on: push
 
 jobs:
+
   build-container:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
+      - name: Install cosign except on PRs
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@main 
+        with:
+          cosign-release: 'v1.4.0'
+
       - name: Build and run stack
         run: docker-compose --env-file .env.test up -d        
         
@@ -27,14 +34,6 @@ jobs:
       - name: Push to docker hub
         run: docker-compose --env-file .env.test push        
 
-      # Install the cosign tool except on PR
-      # https://github.com/sigstore/cosign-installer
-      - name: Install cosign
-        if: github.event_name != 'pull_request'
-        uses: sigstore/cosign-installer@main
-        with:
-          cosign-release: 'v1.4.1'   
-
       # Sign the resulting Docker image digest except on PRs.
       - name: Write signing key to disk (only needed for `cosign sign --key`)
         if: ${{ github.event_name != 'pull_request' }}
@@ -43,9 +42,7 @@ jobs:
       - name: Sign container image
         if: ${{ github.event_name != 'pull_request' }}
         run: |
-          cosign sign --key cosign.key \
-            -a GIT_HASH=${{ github.sha }} \
-            rainan/nationservice:test
+          cosign sign --key cosign.key rainan/nationservice:test
         env:
           COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}" 
 
