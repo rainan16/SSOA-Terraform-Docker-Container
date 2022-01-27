@@ -39,12 +39,32 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         run: echo "${{ secrets.COSIGN_KEY }}" > cosign.key
         
-      - name: Sign container image
+      - name: Sign container image (nationservice)
         if: ${{ github.event_name != 'pull_request' }}
         run: |
           cosign sign --key cosign.key rainan/nationservice:test
         env:
           COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}" 
 
-      - name: Verify signing
+      - name: Verify signing (nationservice)
         run: cosign verify --key .github/workflows/cosign.pub rainan/nationservice:test
+
+      - name: Sign container image (genderservice)
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          cosign sign --key cosign.key rainan/genderservice:test
+        env:
+          COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}" 
+
+      - name: Verify signing (genderservice)
+        run: cosign verify --key .github/workflows/cosign.pub rainan/genderservice:test
+
+      - name: Sign container image (blazorserviceguessmyui)
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          cosign sign --key cosign.key rainan/blazorserviceguessmyui:test
+        env:
+          COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}" 
+
+      - name: Verify signing (blazorserviceguessmyui)
+        run: cosign verify --key .github/workflows/cosign.pub rainan/blazorserviceguessmyui:test

@@ -8,10 +8,22 @@
 
 In github, GITHUB_SECRECTS must be set to run the Actions:
 
+Docker:
+
 ```DOCKER_HUB_USERNAME```
 
 ```DOCKER_HUB_PASSWORD```
 
+Signing with cosign:
+
+```COSIGN_KEY```
+
+```COSIGN_PASSWORD```
+
 Update [.env](.env) and [.env.test](.env.test) the Dockerhub repository:
 
 ```DOCKERHUBNAME```
+
+### Signing container
+
+The container signing action uses ```COSIGN_KEY``` and ```COSIGN_PASSWORD```. Therefore, the public key to check signature has to be stored in [.github/workflows/cosign.bup](.github/workflows/cosign.bup).
