@@ -45,9 +45,9 @@ jobs:
         run: |
           cosign sign --key cosign.key \
             -a GIT_HASH=${{ github.sha }} \
-            rainan16/nationservice:test
+            rainan/nationservice:test
         env:
           COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}" 
 
       - name: Verify signing
-        run: cosign verify --key .github/workflows/cosign.pub rainan16/nationservice:test
+        run: cosign verify --key .github/workflows/cosign.pub rainan/nationservice:test
