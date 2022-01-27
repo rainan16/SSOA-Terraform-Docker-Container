@@ -4,9 +4,11 @@
 
 # SSOA-Terraform-Docker-Container
 
-## Prerequisites to run GITHUB Actions
+## Prerequisites to run Github Actions
 
-In github, GITHUB_SECRECTS must be set to run the Actions:
+### Github secrets
+
+GITHUB_SECRECTS must be set using Github > Repository > Settings to run Github Actions:
 
 Docker:
 
@@ -20,10 +22,22 @@ Signing with cosign:
 
 ```COSIGN_PASSWORD```
 
-Update [.env](.env) and [.env.test](.env.test) the Dockerhub repository:
+### Dockerhub docker-compose push
 
-```DOCKERHUBNAME```
+Docker images are uploaded to Dockerhub via docker-compose (using .env files).
 
-### Signing container
+To push to a different repository, both files, [.env](.env) and [.env.test](.env.test) should point to the new Dockerhub repository: ```DOCKERHUBNAME```
+
+### Signing and verifying container
 
 The container signing action uses ```COSIGN_KEY``` and ```COSIGN_PASSWORD```. Therefore, the public key to check signature has to be stored in [.github/workflows/cosign.bup](.github/workflows/cosign.bup).
+
+Anybody can verify the images on dockerhub by using cosing, e.g.:
+
+```console
+cosign verify --key .github/workflows/cosign.pub rainan/blazorserviceguessmyui:latest
+```
+
+#### Known Issues >>
+
+Currently, the push destination (Dockerhub repository) is hardcoded in "publish-actions". To access other repos, these Github Actions must be modified!
