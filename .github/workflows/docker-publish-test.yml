@@ -22,7 +22,21 @@ jobs:
       - name: Test
         run: docker run --network container:blazorserviceguessmyui appropriate/curl -s --retry 10 --retry-connrefused http://localhost:80/
         
-      - name: Wind down stack
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'rainan/genderservice:test'
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: 'trivy-results.sarif'
+        
+      - name: Shut down docker stack
         run: docker-compose --env-file .env.test down            
         
       - name: Login to DockerHub
