@@ -46,7 +46,11 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           
       - name: Push to docker hub
-        run: docker-compose --env-file .env.test push        
+        run: docker-compose --env-file .env.test push
+        
+      - uses: anchore/sbom-action@v0
+        with:
+          image: rainan/genderservice:test        
 
       # Sign the resulting Docker image digest except on PRs.
       - name: Write signing key to disk (only needed for `cosign sign --key`)
