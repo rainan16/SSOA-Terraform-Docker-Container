@@ -47,6 +47,11 @@ jobs:
           
       - name: Push to docker hub
         run: docker-compose --env-file .env.test push
+        
+      # Create cosign.key file  
+      - name: Write signing key to disk (only needed for `cosign sign --key`)
+        if: ${{ github.event_name != 'pull_request' }}
+        run: echo "${{ secrets.COSIGN_KEY }}" > cosign.key        
           
       # Generate and check SBOM
       - name: Generate SBOM with Syft (nationservice)
@@ -69,13 +74,9 @@ jobs:
           name: nationservice.spdx.json
         
       - name: Cosign attest SBOM
-        run: cosign attest -predicate ${{steps.SBOMartifact.outputs.download-path}}/nationservice.spdx.json -key "${{ secrets.COSIGN_KEY }}" rainan/nationservice:test                
+        run: cosign attest --predicate ./nationservice.spdx.json --key cosign.key rainan/nationservice:test                
 
-      # Sign the resulting Docker image digest except on PRs.
-      - name: Write signing key to disk (only needed for `cosign sign --key`)
-        if: ${{ github.event_name != 'pull_request' }}
-        run: echo "${{ secrets.COSIGN_KEY }}" > cosign.key
-        
+      # Sign the resulting Docker image digest except on PRs.        
       - name: Sign container image (nationservice)
         if: ${{ github.event_name != 'pull_request' }}
         run: |
