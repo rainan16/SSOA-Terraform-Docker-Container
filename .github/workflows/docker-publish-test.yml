@@ -68,7 +68,6 @@ jobs:
           severity-cutoff: critical
 
       - name: Download the SBOM artifact
-        id: SBOMartifact
         uses: actions/download-artifact@v2
         with:
           name: nationservice.spdx.json
@@ -82,6 +81,62 @@ jobs:
       - name: Cosign check attested SBOM
         run: |
           cosign verify-attestation --key .github/workflows/cosign.pub rainan/nationservice:test
+          
+      - name: Generate SBOM with Syft (genderservice)
+        uses: anchore/sbom-action@v0
+        with:
+          image: rainan/genderservice:test
+          artifact-name: genderservice.spdx.json
+      
+      - name: Scan image with Grype (genderservice)
+        uses: anchore/scan-action@v3
+        with:
+          image: "rainan/genderservice:test"
+          fail-build: true
+          severity-cutoff: critical
+
+      - name: Download the SBOM artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: genderservice.spdx.json
+        
+      - name: Cosign attest SBOM
+        run: |
+          cosign attest --predicate ./genderservice.spdx.json --key cosign.key rainan/genderservice:test
+        env:
+          COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}"   
+          
+      - name: Cosign check attested SBOM
+        run: |
+          cosign verify-attestation --key .github/workflows/cosign.pub rainan/genderservice:test   
+
+      - name: Generate SBOM with Syft (blazorserviceguessmyui)
+        uses: anchore/sbom-action@v0
+        with:
+          image: rainan/blazorserviceguessmyui:test
+          artifact-name: blazorserviceguessmyui.spdx.json
+      
+      - name: Scan image with Grype (blazorserviceguessmyui)
+        uses: anchore/scan-action@v3
+        with:
+          image: "rainan/blazorserviceguessmyui:test"
+          fail-build: true
+          severity-cutoff: critical
+
+      - name: Download the SBOM artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: blazorserviceguessmyui.spdx.json
+        
+      - name: Cosign attest SBOM
+        run: |
+          cosign attest --predicate ./blazorserviceguessmyui.spdx.json --key cosign.key rainan/blazorserviceguessmyui:test
+        env:
+          COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}"   
+          
+      - name: Cosign check attested SBOM
+        run: |
+          cosign verify-attestation --key .github/workflows/cosign.pub rainan/blazorserviceguessmyui:test           
 
       # Sign the resulting Docker image digest except on PRs.        
       - name: Sign container image (nationservice)
