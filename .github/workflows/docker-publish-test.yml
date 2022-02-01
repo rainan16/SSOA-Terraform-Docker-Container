@@ -53,6 +53,7 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
           image: rainan/nationservice:test
+          artifact-name: nationservice.spdx.json
       
       - name: Scan image with Grype (nationservice)
         uses: anchore/scan-action@v3
@@ -65,13 +66,10 @@ jobs:
         id: SBOMartifact
         uses: actions/download-artifact@v2
         with:
-          name: rainan-nationservice_test.spdx.json      
-      
-      - name: 'cat file'        
-        run: cat ${{steps.SBOMartifact.outputs.download-path}}/rainan-nationservice_test.spdx.json        
+          name: nationservice.spdx.json
         
       - name: Cosign attest SBOM
-        run: cosign attest -predicate "${{ steps.SBOMartifact.outputs.download-path }}"/rainan-nationservice_test.spdx.json -key "${{ secrets.COSIGN_KEY }}" rainan/nationservice:test                
+        run: cosign attest -predicate ${{steps.SBOMartifact.outputs.download-path}}/nationservice.spdx.json -key "${{ secrets.COSIGN_KEY }}" rainan/nationservice:test                
 
       # Sign the resulting Docker image digest except on PRs.
       - name: Write signing key to disk (only needed for `cosign sign --key`)
