@@ -74,7 +74,10 @@ jobs:
           name: nationservice.spdx.json
         
       - name: Cosign attest SBOM
-        run: cosign attest --predicate ./nationservice.spdx.json --key cosign.key rainan/nationservice:test                
+        run: |
+          cosign attest --predicate ./nationservice.spdx.json --key cosign.key rainan/nationservice:test
+        env:
+          COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}"         
 
       # Sign the resulting Docker image digest except on PRs.        
       - name: Sign container image (nationservice)
