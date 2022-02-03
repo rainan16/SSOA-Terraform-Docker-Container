@@ -138,10 +138,13 @@ jobs:
     needs: [build-container]
     if: github.event_name != 'pull_request'
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2    
+    
       - name: Install cosign
         uses: sigstore/cosign-installer@main 
         with:
-          cosign-release: 'v1.4.0'    
+          cosign-release: 'v1.4.0'      
     
       # Verify signing
       - name: Verify signing (nationservice)
