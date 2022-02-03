@@ -46,6 +46,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           
       - name: Push to docker hub
+        if: github.event_name != 'pull_request'
         run: docker-compose --env-file .env.test push
         
       # Create cosign.key file  
@@ -55,12 +56,14 @@ jobs:
           
       # Generate and check SBOM
       - name: Generate SBOM with Syft (nationservice)
+        if: github.event_name != 'pull_request'
         uses: anchore/sbom-action@v0
         with:
           image: rainan/nationservice:test
           artifact-name: nationservice.spdx.json
       
       - name: Scan image with Grype (nationservice)
+        if: github.event_name != 'pull_request'
         uses: anchore/scan-action@v3
         with:
           image: "rainan/nationservice:test"
@@ -68,23 +71,27 @@ jobs:
           severity-cutoff: critical
 
       - name: Download the SBOM artifact (nationservice)
+        if: github.event_name != 'pull_request'
         uses: actions/download-artifact@v2
         with:
           name: nationservice.spdx.json
         
       - name: Cosign attest SBOM (nationservice)
+        if: github.event_name != 'pull_request'
         run: |
           cosign attest --predicate ./nationservice.spdx.json --key cosign.key rainan/nationservice:test
         env:
           COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}"   
                    
       - name: Generate SBOM with Syft (genderservice)
+        if: github.event_name != 'pull_request'
         uses: anchore/sbom-action@v0
         with:
           image: rainan/genderservice:test
           artifact-name: genderservice.spdx.json
       
       - name: Scan image with Grype (genderservice)
+        if: github.event_name != 'pull_request'
         uses: anchore/scan-action@v3
         with:
           image: "rainan/genderservice:test"
@@ -92,11 +99,13 @@ jobs:
           severity-cutoff: critical
 
       - name: Download the SBOM artifact (genderservice)
+        if: github.event_name != 'pull_request'
         uses: actions/download-artifact@v2
         with:
           name: genderservice.spdx.json
         
       - name: Cosign attest SBOM (genderservice)
+        if: github.event_name != 'pull_request'
         run: |
           cosign attest --predicate ./genderservice.spdx.json --key cosign.key rainan/genderservice:test
         env:
@@ -124,7 +133,16 @@ jobs:
         env:
           COSIGN_PASSWORD: "${{ secrets.COSIGN_PASSWORD }}" 
 
-        
+  test-signatures:
+    runs-on: ubuntu-latest
+    needs: [build-container]
+    if: github.event_name != 'pull_request'
+    steps:
+      - name: Install cosign
+        uses: sigstore/cosign-installer@main 
+        with:
+          cosign-release: 'v1.4.0'    
+    
       # Verify signing
       - name: Verify signing (nationservice)
         run: cosign verify --key .github/workflows/cosign.pub rainan/nationservice:test        
