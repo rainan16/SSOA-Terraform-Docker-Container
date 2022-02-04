@@ -1,4 +1,4 @@
-[![docker-compose-push-test-action](https://github.com/rainan16/SSOA-Terraform-Docker-Container/actions/workflows/docker-publish-test.yml/badge.svg)](https://github.com/rainan16/SSOA-Terraform-Docker-Container/actions/workflows/docker-publish-test.yml)
+[![docker-compose-push-action](https://github.com/rainan16/SSOA-Terraform-Docker-Container/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/rainan16/SSOA-Terraform-Docker-Container/actions/workflows/docker-publish.yml)
 [![CodeQL](https://github.com/rainan16/SSOA-Terraform-Docker-Container/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/rainan16/SSOA-Terraform-Docker-Container/actions/workflows/codeql-analysis.yml)
 [![Codacy Security Scan](https://github.com/rainan16/SSOA-Terraform-Docker-Container/actions/workflows/codacy-analysis.yml/badge.svg)](https://github.com/rainan16/SSOA-Terraform-Docker-Container/actions/workflows/codacy-analysis.yml)
 
