@@ -65,7 +65,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         if (string.IsNullOrEmpty(username)) {
-            username = "Andreas";
+            username = "Max";
         }        
         nationData = await NationService.GetGuessNationData(username);
         genderData = await GenderService.GetGuessGenderData(username);
