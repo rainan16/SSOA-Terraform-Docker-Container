@@ -8,6 +8,7 @@ services:
     image: "${DOCKERHUBNAME}/nationservice:${TAG}"
     ports:
       - "3001:3001"
+      - "23001:19999"
       
   genderservice:
     container_name: genderservice
@@ -16,6 +17,7 @@ services:
     image: "${DOCKERHUBNAME}/genderservice:${TAG}"
     ports:
       - "3002:3002"
+      - "23002:19999"
 
   blazorserviceguessmyui:
     container_name: blazorserviceguessmyui
@@ -28,4 +30,5 @@ services:
       - GENDERSERVICEIP=genderserviceHost
       - GENDERSERVICEPORT=3002     
     ports:
-      - "80:80"        
+      - "80:80"
+      - "20080:19999"        
