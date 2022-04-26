@@ -9,6 +9,8 @@ services:
     ports:
       - "3001:3001"
       - "23001:19999"
+    depends_on:
+      - graphite
       
   genderservice:
     container_name: genderservice
@@ -18,6 +20,8 @@ services:
     ports:
       - "3002:3002"
       - "23002:19999"
+    depends_on:
+      - graphite
 
   blazorserviceguessmyui:
     container_name: blazorserviceguessmyui
@@ -31,15 +35,25 @@ services:
       - GENDERSERVICEPORT=3002     
     ports:
       - "80:80"
-      - "20080:19999"    
+      - "20080:19999"
+    depends_on:
+      - graphite
+      - genderservice
+      - nationservice
 
-  influxdb:
-    image: influxdb
-    hostname: influxdbHost
+  graphite:
+    image: graphiteapp/graphite-statsd
+    hostname: graphitedbHost
     volumes:
-      - 'influxdb-storage:/var/lib/influxdb'
+      - 'graphitedb-storage:/opt/graphite/storage'
     ports:
-      - '8086:8086'
+      - '8080:80'
+      - '2003:2003'
+      - '2004:2004'
+      - '2023:2023'
+      - '2024:2024'
+      - '8125:8125/udp'
+      - '8126:8126'
     restart: always
 
   grafana:
@@ -54,4 +68,4 @@ services:
     restart: always
 volumes:
   grafana-storage:
-  influxdb-storage:          
+  graphitedb-storage:          

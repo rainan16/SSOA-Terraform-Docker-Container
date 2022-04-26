@@ -14,4 +14,6 @@ RUN npm install
 
 COPY . /usr/src/genderservice
 
+COPY exporting.conf /opt/netdata/etc/netdata/exporting.conf
+
 CMD ["sh", "/usr/src/genderservice/docker_startup.sh" ]

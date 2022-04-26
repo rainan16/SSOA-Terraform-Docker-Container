@@ -24,6 +24,8 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+COPY exporting.conf /opt/netdata/etc/netdata/exporting.conf
+
 COPY docker_startup.sh .
 RUN chmod +x /app/docker_startup.sh
 ENTRYPOINT ["/app/docker_startup.sh" ]

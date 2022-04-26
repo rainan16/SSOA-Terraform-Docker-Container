@@ -14,4 +14,6 @@ RUN npm install
 
 COPY . /usr/src/nationservice
 
+COPY exporting.conf /opt/netdata/etc/netdata/exporting.conf
+
 CMD ["sh", "/usr/src/nationservice/docker_startup.sh" ]
