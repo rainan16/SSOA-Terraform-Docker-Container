@@ -1,5 +1,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
 
+COPY exporting.conf /etc/netdata/exporting.conf
+
 RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
 
 RUN wget -O /tmp/netdata-kickstart.sh https://my-netdata.io/kickstart.sh 
@@ -23,8 +25,6 @@ RUN dotnet publish "Blazor-Service-GuessMyUI.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-COPY exporting.conf /opt/netdata/etc/netdata/exporting.conf
 
 COPY docker_startup.sh .
 RUN chmod +x /app/docker_startup.sh
