@@ -1,0 +1,6 @@
+datasources:
+- name: Graphite
+  type: graphite
+  access: proxy
+  url: http://graphitedbHost:8080
+  isDefault: true
