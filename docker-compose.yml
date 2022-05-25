@@ -8,6 +8,9 @@ services:
     image: "${DOCKERHUBNAME}/nationservice:${TAG}"
     ports:
       - "3001:3001"
+      - "23001:19999"
+    depends_on:
+      - graphite
       
   genderservice:
     container_name: genderservice
@@ -16,6 +19,9 @@ services:
     image: "${DOCKERHUBNAME}/genderservice:${TAG}"
     ports:
       - "3002:3002"
+      - "23002:19999"
+    depends_on:
+      - graphite
 
   blazorserviceguessmyui:
     container_name: blazorserviceguessmyui
@@ -28,4 +34,42 @@ services:
       - GENDERSERVICEIP=genderserviceHost
       - GENDERSERVICEPORT=3002     
     ports:
-      - "80:80"        
+      - "80:80"
+      - "20080:19999"
+    depends_on:
+      - graphite
+      - genderservice
+      - nationservice
+
+  graphite:
+    image: graphiteapp/graphite-statsd
+    hostname: graphitedbHost
+    volumes:
+      - 'graphitedb-storage:/opt/graphite/storage'
+    ports:
+      - '8080:80'
+      - '2003:2003'
+      - '2004:2004'
+      - '2023:2023'
+      - '2024:2024'
+      - '8125:8125/udp'
+      - '8126:8126'
+    restart: always
+
+  grafana:
+    image: grafana/grafana
+    hostname: grafanaHost
+    volumes:
+      - 'grafana-storage:/var/lib/grafana'
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+    ports:
+      - '3000:3000'
+    restart: always
+    depends_on:
+      - graphite
+volumes:
+  grafana-storage:
+  graphitedb-storage:          

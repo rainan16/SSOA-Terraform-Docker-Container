@@ -41,3 +41,10 @@ cosign verify --key .github/workflows/cosign.pub rainan/blazorserviceguessmyui:l
 #### Known Issues >>
 
 Currently, the push destination (Dockerhub repository) is hardcoded in "publish-actions". To access other repos, these Github Actions must be modified!
+
+#### Jaeger install packages npm
+```console
+npm install @opentelemetry/node --save
+npm install @opentelemetry/plugin-http --save
+npm install @opentelemetry/plugin-express --save
+```
